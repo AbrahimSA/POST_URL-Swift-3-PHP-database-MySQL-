@@ -1,0 +1,33 @@
+<?php
+
+   define('DB_SERVER', 'localhost:8889');
+   define('DB_USERNAME', 'root');
+   define('DB_PASSWORD', 'root');
+   define('DB_DATABASE', 'swift');
+   $db = mysqli_connect(DB_SERVER,DB_USERNAME,DB_PASSWORD,DB_DATABASE);
+       
+      $myusername= $_REQUEST["user"];
+	  $mypassword = $_REQUEST["pwd"];// Store values in an array
+      
+   if($myusername == '' || $mypassword == '' ) {
+   	
+  	      $returnValue = array("phone"=>"user: " + $myusername + "mypassword: " + $mypassword);// Send back request in JSON format
+          echo json_encode($returnValue);
+   } else {
+      $sql = "SELECT phone FROM users WHERE username = '$myusername' and password = '$mypassword'";
+      $result = mysqli_query($db,$sql);
+      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+      
+      $count = mysqli_num_rows($result);
+      
+			
+      if($count == 1) {
+	      $returnValue = array("phone"=>$row['phone']);// Send back request in JSON format
+          echo json_encode($returnValue);
+               
+      }else {
+         $error ="user: " + $myusername + "mypassword: " + $mypassword + "Your Login Name or Password is invalid. $sql";
+      }
+    }  
+   } 
+?>
